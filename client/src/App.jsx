@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PrivateRouter from "../../api/PrivateRouter";
 import Header from "./components/Header";
 import About from "./pages/About";
+import CreateListing from "./pages/CreateListing";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import SignIn from "./pages/SignIn";
@@ -20,6 +21,7 @@ function App() {
         <Route element={<PrivateRouter />}>
           <Route path="/profile" element={<Profile />} />
         </Route>
+        <Route path="/create-listing" element={<CreateListing />} />
       </Routes>
     </BrowserRouter>
   );
