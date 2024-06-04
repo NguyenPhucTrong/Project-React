@@ -12,7 +12,7 @@ import { app } from "../firebase";
 export default function UpdateListing() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
-  const param = useParams();
+  const params = useParams();
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     imageUrls: [],
@@ -32,20 +32,22 @@ export default function UpdateListing() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    const fetchListning = async () => {
-      const listingId = param.listingId;
-      console.log(listingId);
+    const fetchListing = async () => {
+      const listingId = params.listingId;
       const res = await fetch(`/api/listing/get/${listingId}`);
       const data = await res.json();
       if (data.success === false) {
-        console.log(error.message);
+        console.log(data.message);
         return;
       }
+      setFormData(data);
     };
-    fetchListning();
+
+    fetchListing();
   }, []);
-  console.log(formData);
+
   const handleImageSubmit = (e) => {
     console.log(e.target.value);
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -66,9 +68,9 @@ export default function UpdateListing() {
           setUploading(false);
         })
         .catch((err) => {
+          console.error(err);
           setImageUploadError("Image upload failed (2 mb max per image)");
           setUploading(false);
-          console.log(err);
         });
     } else {
       setImageUploadError("You can only upload 6 images per listing");
@@ -148,7 +150,7 @@ export default function UpdateListing() {
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
-      const res = await fetch(`/api/listing/update/${param.listingId}`, {
+      const res = await fetch(`/api/listing/update/${params.listingId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -159,7 +161,6 @@ export default function UpdateListing() {
         }),
       });
       const data = await res.json();
-      navigate("/");
       setLoading(false);
       if (data.success === false) {
         setError(data.message);
@@ -317,7 +318,6 @@ export default function UpdateListing() {
                 />
                 <div className="flex flex-col items-center">
                   <p>Discounted price</p>
-
                   {formData.type === "rent" && (
                     <span className="text-xs">($ / month)</span>
                   )}
@@ -378,7 +378,7 @@ export default function UpdateListing() {
             disabled={loading || uploading}
             className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
           >
-            {loading ? "Update..." : "Update listing"}
+            {loading ? "Updating..." : "Update listing"}
           </button>
           {error && <p className="text-red-700 text-sm">{error}</p>}
         </div>
