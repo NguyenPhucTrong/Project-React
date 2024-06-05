@@ -6,6 +6,7 @@ import CreateListing from "./pages/CreateListing";
 import Home from "./pages/Home";
 import Listing from "./pages/Listing";
 import Profile from "./pages/Profile";
+import Search from "./pages/Search";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import UpdateListing from "./pages/UpdateListing";
@@ -21,6 +22,7 @@ function App() {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/listing/:listingId" element={<Listing />} />
+        <Route path="/search" element={<Search />} />
 
         <Route element={<PrivateRouter />}>
           <Route path="/profile" element={<Profile />} />
